@@ -6,8 +6,8 @@
   </head>
   <body>
     <h1>Woot</h1>
-    <input type="number" id="sides" value="20">
-    <button type="button" onclick="document.getElementByID("result").innerHTML = d(document.getElementByID("number"))">Roll!</button>
+    <input type="number" id="sides" value="20" step="1">
+    <button type="button" onclick="document.getElementByID("result").innerHTML = d(document.getElementByID("sides"))">Roll!</button>
     <p id="result"></p>
   </body>
 </html>
