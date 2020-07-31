@@ -1,4 +1,4 @@
-import d from "dice.js";
+import d from "./dice.js";
 
 
 function single_abi () {
