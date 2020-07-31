@@ -7,7 +7,13 @@
   <body>
     <h1>Woot</h1>
     <input type="number" id="sides" value="20" step="1">
-    <button type="button" onclick="document.getElementByID('result').innerHTML = d(var document.getElementByID('sides'))">Roll!</button>
+    <button type="button" onclick="roll()">Roll!</button>
     <p id="result"></p>
+    <script>
+      function roll() {
+        const sides = document.getElementByID('sides')
+        document.getElementByID('result').innerHTML = d(sides)
+      }
+    </script>
   </body>
 </html>
