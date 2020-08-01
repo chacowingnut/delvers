@@ -3,6 +3,40 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=0.75">
     <script>
+      var essential_items = ['backpack', 'tinder box', 'wineskin',
+                             'rations (7)'];
+      var light_source_items = ['lantern (with 2 oil flasks)', 'torches (6)'];
+      var mundane_items = ['small hammer', 'iron spikes (12)', 'mirror',
+                           'rope (50\')', 'large sack', 'small sack',
+                           'wolfsbane', '10-foot pole'];
+      var melee_weapons = ['battle axe', 'hand axe', 'dagger', 'silver dagger',
+                           'short sword', 'sword', 'two-handed sword', 'mace',
+                           'club', 'pole arm', 'spear', 'war hammer'];
+      var ranged_weapons = ['crossbow (30 quarrels)', 'long bow (20 arrows)',
+                            'short bow (20 arrows)', 'sling (30 stones)'];
+      var armor = ['gambeson', 'chain mail', 'plate mail'];
+
+      function get_generic_gear() {
+        var inv = [].concat(essential_items);
+        inv.push(choose(light_source_items));
+        inv.push(`gold pieces (${d(3, 6)})`);
+        var items = [].concat(mundane_items);
+        for (i = 0; i < 3; i++) {
+          var item = choose(items);
+          inv.push(item);
+          items = items.filter(k => k !== item);
+        }
+        return inv;
+      }
+
+      const wrap = (s) => s.replace(
+        /(?![^\n]{1,50}$)([^\n]{1,50})\s/g, '$1\n'
+      );
+
+      function choose(some_array) {
+        return some_array[Math.floor(Math.random()*some_array.length)]
+      }
+
       function getRndInteger(min, max) {
         return Math.floor(Math.random() * (max - min + 1) ) + min;
       }
@@ -50,7 +84,7 @@
         bgs = bgs.concat(Array(3).fill('Lumberjack'));
         bgs = bgs.concat(Array(2).fill('Vinter'));
         bgs = bgs.concat(Array(1).fill('Noble bastard'));
-        return bgs[Math.floor(Math.random()*bgs.length)];
+        return choose(bgs);
       }
 
       function get_personality(num=2) {
@@ -70,7 +104,7 @@
                       'honorable', 'loyal', 'shrewd', 'pure'];
         var selected = [];
         for (i=0; i < num; i++) {
-          var trait = traits[Math.floor(Math.random()*traits.length)];
+          var trait = choose(traits);
           selected.push(trait);
           traits = traits.filter(k => k !== trait);
         }
@@ -134,9 +168,15 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
                               14, 12, 12]
           this.post_name_level_hp_gain = 1;
           this.specs = `
-SPECIAL ABILITIES
+SPECIAL ABILITIES:
 May use all armor and shields, but only blunt weapons.
 Divine magic. Turning undead`;
+        }
+        class_equipment() {
+          var inv = ['holy water', 'holy symbol'];
+          inv.push(choose(armor));
+          inv.push(choose(['mace', 'quarterstaff', 'war hammer']));
+          return inv;
         }
       }
 
@@ -158,6 +198,17 @@ normal-sized weapons. Detects construction
 tricks at 2-in-6. Detects room traps at 2-in-6.
 Hears subtle sounds at 2-in-6. Infravistion (60\').`;
         }
+        class_equipment() {
+          var inv = [];
+          var dwarf_melee_weapons = ['axe', 'hand axe', 'dagger',
+                                     'short sword', 'sword', 'mace',
+                                     'club', 'spear', 'war hammer'];
+          var dwarf_ranged = ranged_weapons.filter(k => !k.includes('long'));
+          inv.push(choose(armor));
+          inv.push(choose(dwarf_melee_weapons));
+          inv.push(choose(dwarf_ranged));
+          return inv;
+        }
       }
 
 
@@ -177,6 +228,13 @@ armor. Detects secret doors at 2-in-6. Hears
 subtle sounds at with 2-in-6. Immune to
 paralysis. Infravision (60\').`;
         }
+        class_equipment() {
+          var inv = ['spellbook'];
+          inv.push(choose(armor));
+          inv.push(choose(melee_weapons));
+          inv.push(choose(ranged_weapons));
+          return inv;
+        }
       }
 
 
@@ -194,6 +252,18 @@ paralysis. Infravision (60\').`;
           this.specs = `
 SPECIAL ABILITIES
 Proficient with all armor, weapons, and shields.`;
+        }
+        class_equipment() {
+          var inv = [];
+          inv.push(choose(armor));
+          var melee_weapon = choose(melee_weapons);
+          inv.push(melee_weapon);
+          var big_weapons = ['two-handed sword', 'pole arm', 'battle axe'];
+          if (!big_weapons.includes(melee_weapon)) {
+            inv.push('shield');
+          }
+          inv.push(choose(ranged_weapons));
+          return inv;
         }
       }
 
@@ -216,6 +286,17 @@ in the woods; 2-in-6 in dungeons. 2-in-6 chance
 to hear subtle sounds. +1 to hit for ranged
 attacks.`;
         }
+        class_equipment() {
+          var inv = [];
+          var dwarf_melee_weapons = ['axe', 'hand axe', 'dagger',
+                                     'short sword', 'sword', 'mace',
+                                     'club', 'spear', 'war hammer'];
+          var dwarf_ranged = ranged_weapons.filter(k => !k.includes('long'));
+          inv.push(choose(armor));
+          inv.push(choose(dwarf_melee_weapons));
+          inv.push(choose(dwarf_ranged));
+          return inv
+        }
       }
 
 
@@ -234,6 +315,10 @@ attacks.`;
 SPECIAL ABILITIES
 Spellcasting. May not wear armor.
 Dagger is sole weapon.`;
+        }
+        class_equipment() {
+          var inv = ['spellbook', 'dagger'];
+          return inv;
         }
       }
 
@@ -260,6 +345,12 @@ find or remove treasure traps, hear subtle
 noises, hide in shadows, move silently, open
 locks, and pick pockets.`;
         }
+        class_equipment() {
+          var inv = ['thieves\' tools', 'gambeson'];
+          inv.push(choose(melee_weapons));
+          inv.push(choose(ranged_weapons));
+          return inv;
+        }
       }
 
 
@@ -281,6 +372,7 @@ locks, and pick pockets.`;
           this.level = 1;
           this.xp = 0;
           this.hp = this.char_class.hd + Number(this.abis.conmod);
+          this.inventory = this.generate_inventory();
         }
         level_up() {
           if (this.level < this.char_class.max_level) {
@@ -292,6 +384,29 @@ locks, and pick pockets.`;
             this.xp = this.char_class.xp_progression[this.level - 1]
             this.level += 1;
           }
+        }
+        generate_inventory() {
+          var inv_array = get_generic_gear();
+          inv_array = inv_array.concat(this.char_class.class_equipment());
+          inv_array.sort();
+          var inv = inv_array.join(', ');
+          inv = wrap(inv, 120);
+          return inv;
+        }
+        get ac() {
+          if (this.inventory.includes('plate mail')) {
+            var base_ac = 3
+          } else if (this.inventory.includes('chain mail')) {
+            var base_ac = 5
+          } else if (this.inventory.includes('gambeson')) {
+            var base_ac = 7
+          } else {
+            var base_ac = 9
+          }
+          if (this.inventory.includes('shield')) {
+            base_ac -= 1;
+          }
+          return base_ac - Number(this.abis.dexmod)
         }
         get base_thac0() {
           return this.char_class.thaco_array[this.level]
@@ -311,11 +426,15 @@ Background: ${this.background}
 Personality: ${this.personality}
 XP: ${this.xp}
 
+AC: ${this.ac}
 HP: ${this.hp}
 THAC0 (melee): ${this.melee_thac0}
 THAC0 (ranged): ${this.ranged_thac0}
 ${this.abis.say_abis()}
-${this.char_class.specs}`;
+${this.char_class.specs}
+
+EQUIPMENT:
+${this.inventory}`;
         }
       }
     </script>
