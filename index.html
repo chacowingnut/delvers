@@ -1,20 +1,226 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Delvers</title>
-    <script src="dice.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body>
-    <h1>Woot</h1>
-    <input type="number" id="sides" value="20" step="1">
-    <button type="button" onclick="roll()">Roll!</button>
-    <p id="result"></p>
     <script>
-      function roll() {
-        const sides = document.getElementById('sides').value;
-        document.getElementById('result').innerHTML = d(sides);
+      function getRndInteger(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) ) + min;
+      }
+
+      function d(how_many, sides){
+        var total = 0;
+        var i;
+        for (i = 0; i < how_many; i++) {
+          total += getRndInteger(1, sides);
+        }
+        return total;
+      }
+
+      function get_background() {
+        var bgs = [];
+        bgs = bgs.concat(Array(3).fill('Animal trainer'));
+        bgs = bgs.concat(Array(2).fill('Armorer'));
+        bgs = bgs.concat(Array(4).fill('Baker'));
+        bgs = bgs.concat(Array(3).fill('Blacksmith'));
+        bgs = bgs.concat(Array(1).fill('Bookbinder'));
+        bgs = bgs.concat(Array(4).fill('Bowyer/fletcher'));
+        bgs = bgs.concat(Array(4).fill('Brewer'));
+        bgs = bgs.concat(Array(3).fill('Butcher'));
+        bgs = bgs.concat(Array(3).fill('Carpenter'));
+        bgs = bgs.concat(Array(3).fill('Chandler'));
+        bgs = bgs.concat(Array(3).fill('Cooper'));
+        bgs = bgs.concat(Array(2).fill('Coppersmith'));
+        bgs = bgs.concat(Array(10).fill('Farmer'));
+        bgs = bgs.concat(Array(4).fill('Fisher'));
+        bgs = bgs.concat(Array(4).fill('Furrier'));
+        bgs = bgs.concat(Array(1).fill('Glassblower'));
+        bgs = bgs.concat(Array(4).fill('Hunter'));
+        bgs = bgs.concat(Array(3).fill('Jeweller'));
+        bgs = bgs.concat(Array(3).fill('Lorimer'));
+        bgs = bgs.concat(Array(1).fill('Cartographer'));
+        bgs = bgs.concat(Array(3).fill('Mason'));
+        bgs = bgs.concat(Array(3).fill('Miner'));
+        bgs = bgs.concat(Array(3).fill('Potter'));
+        bgs = bgs.concat(Array(2).fill('Roper'));
+        bgs = bgs.concat(Array(3).fill('Sailor'));
+        bgs = bgs.concat(Array(3).fill('Shipwright'));
+        bgs = bgs.concat(Array(3).fill('Tailor'));
+        bgs = bgs.concat(Array(3).fill('Tanner'));
+        bgs = bgs.concat(Array(3).fill('Thatcher'));
+        bgs = bgs.concat(Array(3).fill('Lumberjack'));
+        bgs = bgs.concat(Array(2).fill('Vinter'));
+        bgs = bgs.concat(Array(1).fill('Noble bastard'));
+        return bgs[Math.floor(Math.random()*bgs.length)];
+      }
+
+      function get_personality(num=2) {
+        var traits = ['boorish', 'aggressive', 'arrogant', 'cruel',
+                      'compulsive', 'rude', 'paranoid', 'greedy', 'hateful',
+                      'ambitious', 'insane', 'intolerant', 'lustful',
+                      'pessimistic', 'absent-minded', 'amiable', 'nervous',
+                      'eccentric', 'bookish', 'chill', 'mischievous',
+                      'loquacious', 'homesick', 'humble', 'curious',
+                      'flirtatious', 'foolhardy', 'flamboyant', 'stoic',
+                      'gregarious', 'secretive', 'naive', 'proud', 'taciturn',
+                      'superstitious', 'devoted', 'friendly', 'faithful',
+                      'eloquent', 'brave', 'cautious', 'celibate',
+                      'generous', 'cheerful', 'confident', 'polite',
+                      'resolute', 'persuasive', 'industrious', 'strict',
+                      'merciful', 'gentle-hearted', 'protective', 'helpful',
+                      'honorable', 'loyal', 'shrewd', 'pure'];
+        var selected = [];
+        for (i=0; i < num; i++) {
+          var trait = traits[Math.floor(Math.random()*traits.length)];
+          selected.push(trait);
+          traits = traits.filter(k => k !== trait);
+        }
+        return selected.join(', ');
+
+      }
+
+
+      class Abilities {
+        constructor () {
+          this.strength = d(3, 6);
+          this.dexterity = d(3, 6);
+          this.constitution = d(3, 6);
+          this.intelligence = d(3, 6);
+          this.wisdom = d(3, 6);
+          this.charisma = d(3, 6);
+          this.mod = [null, null, null, '-3', '-2', '-2', '-1', '-1', 
+                      '-1', '  ', '  ', '  ', '  ', '+1', '+1', '+1',
+                      '+2', '+2', '+3'];
+        }
+        get strmod() {
+          return this.mod[this.strength]
+        }
+        get dexmod() {
+          return this.mod[this.dexterity]
+        }
+        get conmod() {
+          return this.mod[this.constitution]
+        }
+        get intmod() {
+          return this.mod[this.intelligence]
+        }
+        get wismod() {
+          return this.mod[this.wisdom]
+        }
+        get chamod() {
+          return this.mod[this.charisma]
+        }
+        say_abis() {
+          return `
+Strength:     ${("  " + this.strength).slice(-2)} ${this.strmod}
+Dexterity:    ${("  " + this.dexterity).slice(-2)} ${this.dexmod}
+Constitution: ${("  " + this.constitution).slice(-2)} ${this.conmod}
+Intelligence: ${("  " + this.intelligence).slice(-2)} ${this.intmod}
+Wisdom:       ${("  " + this.wisdom).slice(-2)} ${this.wismod}
+Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
+        }
+
+      }
+
+
+      class Cleric {
+        constructor() {
+          this.name = "Cleric";
+	  this.hd = 6;
+	  this.max_level = 14;
+          this.xp_progression = [1500, 3000, 6000, 12000, 25000, 50000,
+                                 100000, 200000, 300000, 400000, 500000,
+                                 600000, 700000];
+          this.thaco_array = [20, 19, 19, 19, 19, 17, 17, 17, 17, 14, 14, 14,
+                              14, 12, 12]
+          this.post_name_level_hp_gain = 1;
+          this.specs = `
+SPECIAL ABILITIES
+May use all armor and shields, but only blunt weapons. Divine magic.
+Turning undead`;
+        }
+      }
+
+
+      class Character {
+        constructor(name='', abis=null, char_class=null) {
+          this.name = name;
+	  if (char_class === null) {
+            this.char_class = new Cleric();
+          } else {
+            this.char_class = char_class;
+          }
+	  if (abis === null) {
+            this.abis = new Abilities();
+          } else {
+            this.abis = abis;
+          }
+          this.background = get_background();
+          this.personality = get_personality();
+          this.level = 1;
+          this.xp = 0;
+          this.hp = this.char_class.hd + Number(this.abis.conmod);
+        }
+        level_up() {
+          if (this.level < this.char_class.max_level) {
+            if (this.level < 10) {
+              this.hp += d(1, this.char_class.hd) + Number(this.abis.conmod);
+            } else {
+              this.hp += this.char_class.post_name_level_hp_gain;
+            }
+            this.xp = this.char_class.xp_progression[this.level - 1]
+            this.level += 1;
+          }
+        }
+        get base_thac0() {
+          return this.char_class.thaco_array[this.level]
+        }
+        get melee_thac0() {
+          return this.base_thac0 - Number(this.abis.strmod);
+        }
+        get ranged_thac0() {
+          return this.base_thac0 - Number(this.abis.dexmod);
+        }
+        get character_sheet() {
+          return `
+Name: ${this.name}
+Level: ${this.level}
+Class: ${this.char_class.name}
+Background: ${this.background}
+Personality: ${this.personality}
+XP: ${this.xp}
+HP: ${this.hp}
+THAC0 (melee): ${this.melee_thac0}
+THAC0 (ranged): ${this.ranged_thac0}
+${this.abis.say_abis()}
+${this.char_class.specs}`;
+        }
+      }
+    </script>
+  </head>
+  <body onload="roll_up_char()">
+    <label for="level">Level: </label>
+    <input type="number" name="level" id="level" value=1  style="width:3em">
+    <label for="classy">Class: </label>
+    <select name="classy" id="classy">
+      <option value="cleric">cleric</option>
+      <!--<option value="rando">rando</option>
+      <option value="dwarf">dwarf</option>
+      <option value="elf">elf</option>
+      <option value="fighter">fighter</option>
+      <option value="halfling">halfling</option>
+      <option value="magic user">magic user</option>
+      <option value="thief">thief</option>-->
+    </select>
+    <button onclick="roll_up_char(document.getElementById('level').value)">Let's roll!</button>
+    <pre id="sheet"></pre>
+    <script>
+      function roll_up_char (level=1) {
+        var foo = new Character('Foobarius');
+        for (i = 0; i < level - 1; i++) {
+          foo.level_up()
+        }
+        document.getElementById('sheet').innerHTML = foo.character_sheet;
       }
     </script>
   </body>
 </html>
+
