@@ -134,8 +134,8 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
           this.post_name_level_hp_gain = 1;
           this.specs = `
 SPECIAL ABILITIES
-May use all armor and shields, but only blunt weapons. Divine magic.
-Turning undead`;
+May use all armor and shields, but only blunt weapons.
+Divine magic. Turning undead`;
         }
       }
 
@@ -197,21 +197,24 @@ ${this.char_class.specs}`;
     </script>
   </head>
   <body onload="roll_up_char()">
-    <label for="level">Level: </label>
-    <input type="number" name="level" id="level" value=1  style="width:3em">
-    <label for="classy">Class: </label>
-    <select name="classy" id="classy">
-      <option value="cleric">cleric</option>
-      <!--<option value="rando">rando</option>
-      <option value="dwarf">dwarf</option>
-      <option value="elf">elf</option>
-      <option value="fighter">fighter</option>
-      <option value="halfling">halfling</option>
-      <option value="magic user">magic user</option>
-      <option value="thief">thief</option>-->
-    </select>
-    <button onclick="roll_up_char(document.getElementById('level').value)">Let's roll!</button>
-    <pre id="sheet"></pre>
+    <div style="max-width:500px; margin:auto">
+      <h1>Random OSR Character</h1>
+      <label for="level">Level: </label>
+      <input type="number" name="level" id="level" value=1  style="width:3em">
+      <label for="classy">Class: </label>
+      <select name="classy" id="classy">
+        <option value="cleric">cleric</option>
+        <!--<option value="rando">rando</option>
+        <option value="dwarf">dwarf</option>
+        <option value="elf">elf</option>
+        <option value="fighter">fighter</option>
+        <option value="halfling">halfling</option>
+        <option value="magic user">magic user</option>
+        <option value="thief">thief</option>-->
+      </select>
+      <button onclick="roll_up_char(document.getElementById('level').value)">Let's roll!</button>
+      <pre id="sheet"></pre>
+    </div>
     <script>
       function roll_up_char (level=1) {
         var foo = new Character('Foobarius');
