@@ -141,13 +141,135 @@ Divine magic. Turning undead`;
       }
 
 
+      class Dwarf {
+        constructor() {
+          this.name = "Dwarf";
+	  this.hd = 8;
+	  this.max_level = 12;
+          this.xp_progression = [2200, 4400, 8800, 17000, 35000, 70000,
+                                 140000, 270000, 400000, 530000, 660000]
+          this.thaco_array = [20, 19, 19, 19, 17, 17, 17, 14, 14, 14,
+                              12, 12, 12];
+          this.post_name_level_hp_gain = 3;
+          this.specs = `
+SPECIAL ABILITIES
+Proficient with all armor. May only use small or
+normal-sized weapons. Detects construction
+tricks at 2-in-6. Detects room traps at 2-in-6.
+Hears subtle sounds at 2-in-6. Infravistion (60\').`;
+        }
+      }
+
+
+      class Elf {
+        constructor() {
+          this.name = "Elf";
+	  this.hd = 6;
+	  this.max_level = 10;
+          this.xp_progression = [4000, 8000, 16000, 32000, 64000, 120000,
+                                 250000, 400000, 600000];
+          this.thaco_array = [20, 19, 19, 19, 17, 17, 17, 14, 14, 14, 12]
+          this.post_name_level_hp_gain = 2;
+          this.specs = `
+SPECIAL ABILITIES
+Spellcasting. Proficient with all weapons and
+armor. Detects secret doors at 2-in-6. Hears
+subtle sounds at with 2-in-6. Immune to
+paralysis. Infravision (60\').`;
+        }
+      }
+
+
+      class Fighter {
+        constructor() {
+          this.name = "Fighter";
+	  this.hd = 8;
+	  this.max_level = 14;
+          this.xp_progression = [2000, 4000, 8000, 16000, 32000, 64000,
+                                 120000, 240000, 360000, 480000, 600000,
+                                 720000, 840000]
+          this.thaco_array = [20, 19, 19, 19, 17, 17, 17, 14, 14, 14, 12, 12,
+                              12, 10, 10]
+          this.post_name_level_hp_gain = 2;
+          this.specs = `
+SPECIAL ABILITIES
+Proficient with all armor, weapons, and shields.`;
+        }
+      }
+
+
+      class Halfling {
+        constructor() {
+          this.name = "Halfling";
+	  this.hd = 6;
+	  this.max_level = 8;
+          this.xp_progression = [2000, 4000, 8000, 16000, 32000, 64000,
+                                 120000]
+          this.thaco_array = [20, 19, 19, 19, 17, 17, 17, 14, 14, 14]
+          this.post_name_level_hp_gain = 0;
+          this.specs = `
+SPECIAL ABILITIES
+Proficient with all weapons and armor, but they
+must be tailored to a halfling\'s small stature.
++2 to AC vs. large creatures. 90% chance to hide
+in the woods; 2-in-6 in dungeons. 2-in-6 chance
+to hear subtle sounds. +1 to hit for ranged
+attacks.`;
+        }
+      }
+
+
+      class MagicUser {
+        constructor() {
+          this.name = "Magic user";
+	  this.hd = 4;
+	  this.max_level = 14;
+          this.xp_progression = [2500, 5000, 10000, 20000, 40000,
+                                 80000, 150000, 300000, 450000, 600000,
+                                 750000, 900000, 1050000]
+          this.thaco_array = [20, 19, 19, 19, 19, 19, 17, 17, 17, 17, 17, 14,
+                              14, 14, 14]
+          this.post_name_level_hp_gain = 1;
+          this.specs = `
+SPECIAL ABILITIES
+Spellcasting. May not wear armor.
+Dagger is sole weapon.`;
+        }
+      }
+
+
+      class Thief {
+        constructor() {
+          this.name = "Thief";
+	  this.hd = 4;
+	  this.max_level = 14;
+          this.xp_progression = [1200, 2400, 4800, 9600, 20000, 40000,
+                                 80000, 160000, 280000, 400000, 520000,
+                                 640000, 760000]
+          this.thaco_array = [20, 19, 19, 19, 19, 17, 17, 17, 17, 14, 14, 14,
+                              14, 12, 12]
+          this.post_name_level_hp_gain = 2;
+          this.specs = `
+SPECIAL ABILITIES
+May back-stab at +4 to hit and 2x damage.
+Proficient with all weapons, but only light
+armor. 80% chance to decipher languages
+at level 4+. 90% chance to use scrolls from
+level 10+. Able to climb sheer surfaces,
+find or remove treasure traps, hear subtle
+noises, hide in shadows, move silently, open
+locks, and pick pockets.`;
+        }
+      }
+
+
       class Character {
         constructor(name='', abis=null, char_class=null) {
           this.name = name;
 	  if (char_class === null) {
-            this.char_class = new Cleric();
+            this.char_class = new Fighter();
           } else {
-            this.char_class = char_class;
+            this.char_class = new char_class;
           }
 	  if (abis === null) {
             this.abis = new Abilities();
@@ -188,6 +310,7 @@ Class: ${this.char_class.name}
 Background: ${this.background}
 Personality: ${this.personality}
 XP: ${this.xp}
+
 HP: ${this.hp}
 THAC0 (melee): ${this.melee_thac0}
 THAC0 (ranged): ${this.ranged_thac0}
@@ -204,21 +327,33 @@ ${this.char_class.specs}`;
       <input type="number" name="level" id="level" value=1  style="width:3em">
       <label for="classy">Class: </label>
       <select name="classy" id="classy">
+        <option value="rando">rando</option>
         <option value="cleric">cleric</option>
-        <!--<option value="rando">rando</option>
         <option value="dwarf">dwarf</option>
         <option value="elf">elf</option>
         <option value="fighter">fighter</option>
         <option value="halfling">halfling</option>
         <option value="magic user">magic user</option>
-        <option value="thief">thief</option>-->
+        <option value="thief">thief</option>
       </select>
-      <button onclick="roll_up_char(document.getElementById('level').value)">Let's roll!</button>
+      <button onclick="roll_up_char(document.getElementById('level').value, document.getElementById('classy').value)">Let's roll!</button>
       <pre id="sheet"></pre>
     </div>
     <script>
-      function roll_up_char (level=1) {
-        var foo = new Character('Foobarius');
+      function roll_up_char (level=1, cls='rando') {
+        if (cls === 'rando') {
+          cls = ['cleric', 'dwarf', 'elf', 'fighter', 'halfling', 'magic user', 'thief'][Math.floor(Math.random()*7)]
+        }
+        classes = {
+          cleric: Cleric,
+          dwarf: Dwarf,
+          elf: Elf,
+          fighter: Fighter,
+          halfling: Halfling,
+          'magic user': MagicUser,
+          thief: Thief
+        }
+        var foo = new Character('Foobarius', null, classes[cls]);
         for (i = 0; i < level - 1; i++) {
           foo.level_up()
         }

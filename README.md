@@ -6,4 +6,4 @@ To do:
 
 - [ ] Inventory
 - [ ] Spells
-- [ ] The rest of the classes
+- [ ] Random names
