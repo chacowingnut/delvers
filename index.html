@@ -171,7 +171,7 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
           this.thaco_array = [20, 19, 19, 19, 19, 17, 17, 17, 17, 14, 14, 14,
                               14, 12, 12]
           this.post_name_level_hp_gain = 1;
-          this.specs = wrap('May use all armor and shields, but only blunt weapons. Divine magic. Turning undead');
+          this.specs = wrap('May use all armor and shields, but only blunt weapons. Divine magic. Turning undead.');
         }
         class_equipment() {
           var inv = ['holy water', 'holy symbol'];
@@ -322,6 +322,94 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
           return inv;
         }
       }
+      cleric_spells_per_day = [
+          [0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0],
+          [0, 1, 0, 0, 0, 0],
+          [0, 2, 0, 0, 0, 0],
+          [0, 2, 1, 0, 0, 0],
+          [0, 2, 2, 0, 0, 0],
+          [0, 2, 2, 1, 1, 0],
+          [0, 2, 2, 2, 1, 1],
+          [0, 3, 3, 2, 2, 1],
+          [0, 3, 3, 3, 2, 2],
+          [0, 4, 4, 3, 3, 2],
+          [0, 4, 4, 4, 3, 3],
+          [0, 5, 5, 4, 4, 3],
+          [0, 5, 5, 5, 4, 4],
+          [0, 6, 5, 5, 5, 4]
+      ]
+
+      mu_spells_per_day = [
+          [0, 0, 0, 0, 0, 0, 0],
+          [0, 1, 0, 0, 0, 0, 0],
+          [0, 2, 0, 0, 0, 0, 0],
+          [0, 2, 1, 0, 0, 0, 0],
+          [0, 2, 2, 0, 0, 0, 0],
+          [0, 2, 2, 1, 0, 0, 0],
+          [0, 2, 2, 2, 0, 0, 0],
+          [0, 3, 2, 2, 1, 0, 0],
+          [0, 3, 3, 2, 2, 0, 0],
+          [0, 3, 3, 3, 2, 1, 0],
+          [0, 3, 3, 3, 3, 2, 0],
+          [0, 4, 3, 3, 3, 2, 1],
+          [0, 4, 4, 3, 3, 3, 2],
+          [0, 4, 4, 4, 3, 3, 3],
+          [0, 4, 4, 4, 4, 3, 3]
+      ]
+
+      cleric_spells = [
+        null,
+        ['cure light wounds', 'detect evil', 'detect magic', 'light',
+         'protection from evil', 'purify food and water', 'remove fear',
+         'resist cold'],
+        ['bless', 'find traps', 'hold person', 'know alignment', 'resist fire',
+         'silence (15\') radius', 'snake charm', 'speak with animals'],
+        ['continual light', 'cure disease', 'growth of animal',
+         'locate object', 'remove curse', 'striking'],
+        ['create water', 'cure serious wounds', 'neutralize poison',
+         'protection from evil (10\' radius)', 'speak with plants',
+         'sticks to snakes'],
+        ['commune', 'create food', 'dispel evil', 'insect plague', 'quest',
+         'raise dead']
+      ]
+
+      mu_spells = [
+        null,
+        ['charm person', 'detect magic', 'floating disc', 'hold portal', 'light',
+         'magic missile', 'protection from evil', 'read languages', 'read magic',
+         'shield', 'sleep', 'ventriloquism'],
+        ['continual light', 'detect evil', 'detect invisible', 'ESP',
+         'invisibility', 'knock', 'levitate', 'locate object', 'mirror image',
+         'phantasmal force', 'web', 'wizard lock'],
+        ['clairvoyance', 'dispel magic', 'fireball', 'fly', 'haste', 'hold person',
+         'infravistion', 'invisibility (10\' radius)', 'lightning bolt',
+         'protection from evil (10\' radius)', 'protection from normal missiles',
+         'water breathing'],
+        ['charm monster', 'confusion', 'dimension door', 'growth of plants',
+         'hallucinatory terrain', 'massmorph', 'polymorph others',
+         'polymorph self', 'remove curse', 'wall of fire', 'wall of ice',
+         'wizard eye'],
+        ['animate dead', 'cloudkill', 'conjeure elemental', 'contact higher plane',
+         'feeblemind', 'hold monster', 'magic jar', 'pass-wall', 'telekenesis',
+         'teleport', 'transmute rock to mud', 'wall of stone'],
+        ['anti-magic shell', 'control weather', 'death spell', 'disintegrate',
+         'geas', 'invisible stalker', 'lower water', 'move earth', 'part water',
+         'projected image', 'reincarnation', 'stone to flesh'],
+      ]
+
+      function generate_spellbook(caster_level) {
+        var spells = [];
+        for (i = 1; i < 7; i++) {
+          var available_spells = mu_spells[i];
+          for (k = 0; k < mu_spells_per_day[caster_level][i]; k++) {
+            var random_spell = choose(available_spells);
+            spells.push(random_spell);
+            available_spells = available_spells.filter(k => k !== random_spell);
+          }
+        }
+        return wrap(spells.join(', '));
+      }
 
 
       class Character {
@@ -401,6 +489,23 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
           statblock[2] += `    AC: ${this.ac}`;
           statblock[3] += `    THAC0 (melee): ${this.melee_thac0}`;
           statblock[4] += `    THAC0 (ranged): ${this.ranged_thac0}`;
+          var spells = '';
+          if (this.char_class.name === 'Cleric') {
+            var spd = cleric_spells_per_day[this.level].slice(1);
+            var prepped = [];
+            for (i = 1; i < 6; i++) {
+              for (var j = 0; j < spd[i-1]; j++) {
+                prepped.push(choose(cleric_spells[i]));
+              }
+            }
+            prepped = wrap(prepped.join(', '));
+            spd = `\nSPELLS PER DAY (BY LEVEL): ${spd.join(', ')}`;
+            spells = `${spd}\n\nPREPARED SPELLS:\n${prepped}\n`;
+          } else if (this.char_class.name === 'Magic user') {
+            const spd = mu_spells_per_day[this.level].slice(1)
+            const book = generate_spellbook(this.level)
+            spells = `\nSPELLS PER DAY: ${spd}\n\nSPELLBOOK:\n${book}\n`;
+          }
           return `
 ${name_bit}Background: ${this.background}
 ${level_bit}Personality: ${this.personality}
@@ -409,7 +514,7 @@ ${statblock.join('\n')}
 
 SPECIAL ABILITIES:
 ${this.char_class.specs}
-
+${spells}
 EQUIPMENT:
 ${this.inventory}`;
         }
@@ -441,22 +546,22 @@ ${this.inventory}`;
         if (cls === 'rando') {
           max_abi = Math.max(...abis.abi_list);
           if (abis.strength === max_abi) {
-            if (abis.intelligence > 9 & Math.random() < 0.07) {
+            if (abis.intelligence > 9 && Math.random() < 0.07) {
               cls = 'elf';
             } else {
               cls = 'fighter';
             }
-          } else if (abis.constitution > 9 & abis.constitution === max_abi
-                     & Math.random() < 0.1) {
+          } else if (abis.constitution > 9 && abis.constitution === max_abi
+                     && Math.random() < 0.1) {
             cls = 'dwarf';
           } else if (abis.dexterity === max_abi) {
-            if (abis.constitution > 9 & abis.dexterity > 9 & Math.random() < 0.1) {
+            if (abis.constitution > 9 && abis.dexterity > 9 && Math.random() < 0.1) {
               cls = 'halfling';
             } else {
               cls = 'thief';
             }
           } else if (abis.intelligence === max_abi) {
-            if (abis.intelligence > 9 & Math.random() < 0.7) {
+            if (abis.intelligence > 9 && Math.random() < 0.7) {
               cls = 'elf';
             } else {
             cls = 'magic user';
