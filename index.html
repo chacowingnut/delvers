@@ -30,7 +30,7 @@
       }
 
       const wrap = (s) => s.replace(
-        /(?![^\n]{1,50}$)([^\n]{1,50})\s/g, '$1\n'
+        /(?![^\n]{1,60}$)([^\n]{1,60})\s/g, '$1\n'
       );
 
       function choose(some_array) {
@@ -125,6 +125,10 @@
                       '-1', '  ', '  ', '  ', '  ', '+1', '+1', '+1',
                       '+2', '+2', '+3'];
         }
+        get abi_list() {
+          return [this.strength, this.dexterity, this.constitution,
+                  this. intelligence, this.wisdom, this.charisma]
+        }
         get strmod() {
           return this.mod[this.strength]
         }
@@ -167,10 +171,7 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
           this.thaco_array = [20, 19, 19, 19, 19, 17, 17, 17, 17, 14, 14, 14,
                               14, 12, 12]
           this.post_name_level_hp_gain = 1;
-          this.specs = `
-SPECIAL ABILITIES:
-May use all armor and shields, but only blunt weapons.
-Divine magic. Turning undead`;
+          this.specs = wrap('May use all armor and shields, but only blunt weapons. Divine magic. Turning undead');
         }
         class_equipment() {
           var inv = ['holy water', 'holy symbol'];
@@ -191,12 +192,7 @@ Divine magic. Turning undead`;
           this.thaco_array = [20, 19, 19, 19, 17, 17, 17, 14, 14, 14,
                               12, 12, 12];
           this.post_name_level_hp_gain = 3;
-          this.specs = `
-SPECIAL ABILITIES
-Proficient with all armor. May only use small or
-normal-sized weapons. Detects construction
-tricks at 2-in-6. Detects room traps at 2-in-6.
-Hears subtle sounds at 2-in-6. Infravistion (60\').`;
+          this.specs = wrap('Proficient with all armor. May only use small or normal-sized weapons. Detects construction tricks at 2-in-6. Detects room traps at 2-in-6. Hears subtle sounds at 2-in-6. Infravistion (60\').');
         }
         class_equipment() {
           var inv = [];
@@ -221,12 +217,7 @@ Hears subtle sounds at 2-in-6. Infravistion (60\').`;
                                  250000, 400000, 600000];
           this.thaco_array = [20, 19, 19, 19, 17, 17, 17, 14, 14, 14, 12]
           this.post_name_level_hp_gain = 2;
-          this.specs = `
-SPECIAL ABILITIES
-Spellcasting. Proficient with all weapons and
-armor. Detects secret doors at 2-in-6. Hears
-subtle sounds at with 2-in-6. Immune to
-paralysis. Infravision (60\').`;
+          this.specs = wrap('Spellcasting. Proficient with all weapons and armor. Detects secret doors at 2-in-6. Hears subtle sounds at with 2-in-6. Immune to paralysis. Infravision (60\').');
         }
         class_equipment() {
           var inv = ['spellbook'];
@@ -249,9 +240,7 @@ paralysis. Infravision (60\').`;
           this.thaco_array = [20, 19, 19, 19, 17, 17, 17, 14, 14, 14, 12, 12,
                               12, 10, 10]
           this.post_name_level_hp_gain = 2;
-          this.specs = `
-SPECIAL ABILITIES
-Proficient with all armor, weapons, and shields.`;
+          this.specs = wrap('Proficient with all armor, weapons, and shields.');
         }
         class_equipment() {
           var inv = [];
@@ -277,14 +266,7 @@ Proficient with all armor, weapons, and shields.`;
                                  120000]
           this.thaco_array = [20, 19, 19, 19, 17, 17, 17, 14, 14, 14]
           this.post_name_level_hp_gain = 0;
-          this.specs = `
-SPECIAL ABILITIES
-Proficient with all weapons and armor, but they
-must be tailored to a halfling\'s small stature.
-+2 to AC vs. large creatures. 90% chance to hide
-in the woods; 2-in-6 in dungeons. 2-in-6 chance
-to hear subtle sounds. +1 to hit for ranged
-attacks.`;
+          this.specs = wrap('Proficient with all weapons and armor, but they must be tailored to a halfling\'s small stature. +2 to AC vs. large creatures. 90% chance to hide in the woods; 2-in-6 in dungeons. 2-in-6 chance to hear subtle sounds. +1 to hit for ranged attacks.');
         }
         class_equipment() {
           var inv = [];
@@ -311,10 +293,7 @@ attacks.`;
           this.thaco_array = [20, 19, 19, 19, 19, 19, 17, 17, 17, 17, 17, 14,
                               14, 14, 14]
           this.post_name_level_hp_gain = 1;
-          this.specs = `
-SPECIAL ABILITIES
-Spellcasting. May not wear armor.
-Dagger is sole weapon.`;
+          this.specs = wrap('Spellcasting. May not wear armor. Dagger is sole weapon.');
         }
         class_equipment() {
           var inv = ['spellbook', 'dagger'];
@@ -334,16 +313,7 @@ Dagger is sole weapon.`;
           this.thaco_array = [20, 19, 19, 19, 19, 17, 17, 17, 17, 14, 14, 14,
                               14, 12, 12]
           this.post_name_level_hp_gain = 2;
-          this.specs = `
-SPECIAL ABILITIES
-May back-stab at +4 to hit and 2x damage.
-Proficient with all weapons, but only light
-armor. 80% chance to decipher languages
-at level 4+. 90% chance to use scrolls from
-level 10+. Able to climb sheer surfaces,
-find or remove treasure traps, hear subtle
-noises, hide in shadows, move silently, open
-locks, and pick pockets.`;
+          this.specs = wrap('May back-stab at +4 to hit and 2x damage. Proficient with all weapons, but only light armor. 80% chance to decipher languages at level 4+. 90% chance to use scrolls from level 10+. Able to climb sheer surfaces, find or remove treasure traps, hear subtle noises, hide in shadows, move silently, open locks, and pick pockets.');
         }
         class_equipment() {
           var inv = ['thieves\' tools', 'gambeson'];
@@ -415,22 +385,29 @@ locks, and pick pockets.`;
           return this.base_thac0 - Number(this.abis.strmod);
         }
         get ranged_thac0() {
-          return this.base_thac0 - Number(this.abis.dexmod);
+          var hobbit_bonus = 0
+          if (this.char_class.name === 'Halfling') {
+            hobbit_bonus = 1
+          }
+          return this.base_thac0 - Number(this.abis.dexmod) - hobbit_bonus;
         }
         get character_sheet() {
+          const ncol = 23;
+          var name_bit = `Name: ${this.name}`.padEnd(ncol);
+          var level_bit = `Level: ${this.level}`.padEnd(ncol);
+          var class_bit = `Class: ${this.char_class.name}`.padEnd(ncol);
+          var statblock = this.abis.say_abis().split('\n');
+          statblock[1] += `    HP: ${this.hp}`;
+          statblock[2] += `    AC: ${this.ac}`;
+          statblock[3] += `    THAC0 (melee): ${this.melee_thac0}`;
+          statblock[4] += `    THAC0 (ranged): ${this.ranged_thac0}`;
           return `
-Name: ${this.name}
-Level: ${this.level}
-Class: ${this.char_class.name}
-Background: ${this.background}
-Personality: ${this.personality}
-XP: ${this.xp}
+${name_bit}Background: ${this.background}
+${level_bit}Personality: ${this.personality}
+${class_bit}XP: ${this.xp}
+${statblock.join('\n')}
 
-AC: ${this.ac}
-HP: ${this.hp}
-THAC0 (melee): ${this.melee_thac0}
-THAC0 (ranged): ${this.ranged_thac0}
-${this.abis.say_abis()}
+SPECIAL ABILITIES:
 ${this.char_class.specs}
 
 EQUIPMENT:
@@ -460,8 +437,36 @@ ${this.inventory}`;
     </div>
     <script>
       function roll_up_char (level=1, cls='rando') {
+        var abis = new Abilities();
         if (cls === 'rando') {
-          cls = ['cleric', 'dwarf', 'elf', 'fighter', 'halfling', 'magic user', 'thief'][Math.floor(Math.random()*7)]
+          max_abi = Math.max(...abis.abi_list);
+          if (abis.strength === max_abi) {
+            if (abis.intelligence > 9 & Math.random() < 0.07) {
+              cls = 'elf';
+            } else {
+              cls = 'fighter';
+            }
+          } else if (abis.constitution > 9 & abis.constitution === max_abi
+                     & Math.random() < 0.1) {
+            cls = 'dwarf';
+          } else if (abis.dexterity === max_abi) {
+            if (abis.constitution > 9 & abis.dexterity > 9 & Math.random() < 0.1) {
+              cls = 'halfling';
+            } else {
+              cls = 'thief';
+            }
+          } else if (abis.intelligence === max_abi) {
+            if (abis.intelligence > 9 & Math.random() < 0.7) {
+              cls = 'elf';
+            } else {
+            cls = 'magic user';
+            }
+          } else if (abis.wisdom === max_abi) {
+            cls = 'cleric';
+          } else {
+          cls = ['cleric', 'fighter',
+                 'magic user', 'thief'][Math.floor(Math.random()*7)]
+          }
         }
         classes = {
           cleric: Cleric,
@@ -472,7 +477,7 @@ ${this.inventory}`;
           'magic user': MagicUser,
           thief: Thief
         }
-        var foo = new Character('Foobarius', null, classes[cls]);
+        var foo = new Character('', abis, classes[cls]);
         for (i = 0; i < level - 1; i++) {
           foo.level_up()
         }
