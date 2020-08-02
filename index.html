@@ -503,7 +503,7 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
             spd = `\nSPELLS PER DAY (BY LEVEL): ${spd.join(', ')}`;
             spells = `${spd}\n\nPREPARED SPELLS:\n${prepped}\n`;
           } else if (this.char_class.name === 'Magic user'
-                     || This.char_class.name === 'Elf') {
+                     || this.char_class.name === 'Elf') {
             const spd = mu_spells_per_day[this.level].slice(1).join(', ');
             const book = generate_spellbook(this.level);
             spells = `\nSPELLS PER DAY (BY LEVEL): ${spd}\n\nSPELLBOOK:\n${book}\n`;
