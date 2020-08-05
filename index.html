@@ -2,6 +2,7 @@
 <html>
   <head>
     <link href="https://fonts.googleapis.com/css2?family=Eagle+Lake&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=0.75">
     <script>
       var essential_items = ['backpack', 'tinder box', 'wineskin',
@@ -14,13 +15,36 @@
                            'short sword', 'sword', 'two-handed sword', 'mace',
                            'club', 'pole arm', 'spear', 'war hammer'];
       var ranged_weapons = ['crossbow (30 quarrels)', 'long bow (20 arrows)',
-                            'short bow (20 arrows)', 'sling (30 stones)'];
+                            'short bow (20 arrows)', 'sling (30 stones)',
+                            'javelin'];
       var armor = ['gambeson', 'chain mail', 'plate mail'];
+
+      const encumbrances = {
+        'battle axe': 50, club: 50, 'crossbow (30 quarrels)': 50, dagger: 10,
+        'hand axe': 30, javelin: 20, 'long bow (20 arrows)': 30, mace: 30,
+        'pole arm': 150, 'short bow (20 arrows)': 30, 'silver dagger': 10,
+        'sling (30 stones)': 20, spear: 30, quarterstaff: 40, sword: 60,
+        'short sword': 30, 'two-handed sword': 150, 'war hammer': 30,
+        gambeson: 200, 'chain mail': 400, 'plate mail': 500, shield: 100
+      };
+
+      const appearances = ['aquiline', 'athletic', 'barrel-chested', 'boney',
+                           'brawny', 'brutish', 'bullnecked', 'chiseled',
+                           'coltish', 'corpulent', 'craggy', 'delicate',
+                           'furrowed', 'gaunt', 'gorgeous', 'grizzled',
+                           'haggard', 'handsome', 'hideous', 'lanky', 'pudgy',
+                           'ripped', 'rosy', 'scrawny', 'sinewy', 'slender',
+                           'slumped', 'solid', 'square-jawed', 'statuesque',
+                           'towering', 'trim', 'weathered', 'willowy', 'wiry',
+                           'wrinkly']
+
+      function get_appearance() {
+        return choose(appearances);
+      }
 
       function get_generic_gear() {
         var inv = [].concat(essential_items);
         inv.push(choose(light_source_items));
-        inv.push(`gold pieces (${d(3, 6)})`);
         var items = [].concat(mundane_items);
         for (i = 0; i < 3; i++) {
           var item = choose(items);
@@ -33,6 +57,27 @@
       const wrap = (s) => s.replace(
         /(?![^\n]{1,60}$)([^\n]{1,60})\s/g, '$1\n'
       );
+
+      function consolidator(some_array) {
+        var stuff = {};
+        for (var i = 0; i < some_array.length; i++) {
+          if (stuff.hasOwnProperty(some_array[i])) {
+            stuff[some_array[i]] += 1;
+          } else {
+            stuff[some_array[i]] = 1;
+          }
+        }
+        var consolidated = []
+        const keys = Object.keys(stuff);
+        for (const key of keys) {
+          if (stuff[key] > 1) {
+            consolidated.push(`${key} (x${stuff[key]})`);
+          } else {
+            consolidated.push(key);
+          }
+        }
+        return consolidated
+      }
 
       function choose(some_array) {
         return some_array[Math.floor(Math.random()*some_array.length)]
@@ -432,11 +477,12 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
           this.xp = 0;
           this.hp = this.char_class.hd + Number(this.abis.conmod);
           this.inventory = this.generate_inventory();
+          this.appearance = get_appearance();
         }
         level_up() {
           if (this.level < this.char_class.max_level) {
             if (this.level < 10) {
-              this.hp += d(1, this.char_class.hd) + Number(this.abis.conmod);
+              this.hp += Math.max(d(1, this.char_class.hd) + Number(this.abis.conmod), 1);
             } else {
               this.hp += this.char_class.post_name_level_hp_gain;
             }
@@ -447,25 +493,44 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
         generate_inventory() {
           var inv_array = get_generic_gear();
           inv_array = inv_array.concat(this.char_class.class_equipment());
+          const coins = d(3, 6);
+          this.encumbrance = 80 + coins;
+          for (const k of inv_array) {
+            if (Object.keys(encumbrances).includes(k)) {
+              this.encumbrance += encumbrances[k];
+            }
+          }
+          inv_array.push(`gold pieces (${coins})`);
           inv_array.sort();
           var inv = inv_array.join(', ');
           inv = wrap(inv, 120);
           return inv;
         }
+        get move(){
+          if (this.encumbrance > 800) {
+            return '30\' (10\')';
+          } else if (this.encumbrance > 600) {
+            return '60\' (20\')'
+          } else if (this.encumbrance > 400) {
+            return '90\' (30\')'
+          } else {
+            return '120\' (40\')'
+          }
+        }
         get ac() {
           if (this.inventory.includes('plate mail')) {
-            var base_ac = 3
+            var base_ac = 3;
           } else if (this.inventory.includes('chain mail')) {
-            var base_ac = 5
+            var base_ac = 5;
           } else if (this.inventory.includes('gambeson')) {
-            var base_ac = 7
+            var base_ac = 7;
           } else {
-            var base_ac = 9
+            var base_ac = 9;
           }
           if (this.inventory.includes('shield')) {
             base_ac -= 1;
           }
-          return base_ac - Number(this.abis.dexmod)
+          return base_ac - Number(this.abis.dexmod);
         }
         get base_thac0() {
           return this.char_class.thaco_array[this.level]
@@ -490,6 +555,8 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
           statblock[2] += `    AC: ${this.ac}`;
           statblock[3] += `    THAC0 (melee): ${this.melee_thac0}`;
           statblock[4] += `    THAC0 (ranged): ${this.ranged_thac0}`;
+          statblock[5] += `    MOVEMENT: ${this.move}`;
+          statblock[6] += `    XP: ${this.xp}`;
           var spells = '';
           if (this.char_class.name === 'Cleric') {
             var spd = cleric_spells_per_day[this.level].slice(1);
@@ -499,7 +566,7 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
                 prepped.push(choose(cleric_spells[i]));
               }
             }
-            prepped = wrap(prepped.join(', '));
+            prepped = wrap(consolidator(prepped).join(', '));
             spd = `\nSPELLS PER DAY (BY LEVEL): ${spd.join(', ')}`;
             spells = `${spd}\n\nPREPARED SPELLS:\n${prepped}\n`;
           } else if (this.char_class.name === 'Magic user'
@@ -510,22 +577,26 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
           }
           return `
 ${name_bit}Background: ${this.background}
-${level_bit}Personality: ${this.personality}
-${class_bit}XP: ${this.xp}
+${level_bit}Appearance: ${this.appearance}
+${class_bit}Personality: ${this.personality}
 ${statblock.join('\n')}
 
 SPECIAL ABILITIES:
 ${this.char_class.specs}
 ${spells}
 EQUIPMENT:
-${this.inventory}`;
+${this.inventory}
+
+ENCUMBRANCE:
+${this.encumbrance} coins-weight`;
         }
       }
     </script>
   </head>
   <body onload="roll_up_char()">
     <div style="max-width:500px; margin:auto">
-      <h1 style="font-family:'Eagle Lake'">Random OSR Character</h1>
+      <h1 style="font-family:'Eagle Lake';text-align:center">Random OSR Character</h1>
+      <p style="font-family:'IM Fell DW Pica';text-align:justify">These characters are 1981 B/X by-the-book with a few minor exceptions. Gambeson is substituted for leather armor. Characters get max HP at first level. THAC0 is used instead of the OG to-hit matrix.</p>
       <label for="level">Level: </label>
       <input type="number" name="level" id="level" value=1  style="width:3em">
       <label for="classy">Class: </label>
