@@ -595,8 +595,8 @@ ${this.encumbrance} coins-weight`;
   </head>
   <body onload="roll_up_char()">
     <div style="max-width:500px; margin:auto">
-      <h1 style="font-family:'Eagle Lake';text-align:center">Random OSR Character</h1>
-      <p style="font-family:'IM Fell DW Pica';text-align:justify">These characters are 1981 B/X by-the-book with a few minor exceptions. Gambeson is substituted for leather armor. Characters get max HP at first level. THAC0 is used instead of the OG to-hit matrix.</p>
+      <h1 style="font-family:'Eagle Lake';text-align:center;">Random OSR Character</h1>
+      <p style="font-family:'IM Fell DW Pica';text-align:justify;">These characters are 1981 B/X by-the-book with a few minor exceptions. Gambeson is substituted for leather armor. Characters get max HP at first level. THAC0 is used instead of the OG to-hit matrix.</p>
       <label for="level">Level: </label>
       <input type="number" name="level" id="level" value=1  style="width:3em">
       <label for="classy">Class: </label>
@@ -611,7 +611,7 @@ ${this.encumbrance} coins-weight`;
         <option value="thief">thief</option>
       </select>
       <button onclick="roll_up_char(document.getElementById('level').value, document.getElementById('classy').value)">Let's roll!</button>
-      <pre id="sheet" style="font-family:'monospace';"></pre>
+      <pre id="sheet"></pre>
     </div>
     <script>
       function roll_up_char (level=1, cls='rando') {
