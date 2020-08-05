@@ -4,7 +4,5 @@ Random OSR characters!
 
 To do:
 
-- [x] Spells
-- [ ] Random names
-- [x] Column-ize character sheet
+- [ ] Random names?
 - [ ] Prime requisite bonus
