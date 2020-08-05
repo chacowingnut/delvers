@@ -519,11 +519,12 @@ Charisma:     ${("  " + this.charisma).slice(-2)} ${this.chamod}`
           }
         }
         get ac() {
-          if (this.inventory.includes('plate mail')) {
+	  var inv = this.inventory.replace(/\n/g, ' ')
+          if (inv.includes('plate mail')) {
             var base_ac = 3;
-          } else if (this.inventory.includes('chain mail')) {
+          } else if (inv.includes('chain mail')) {
             var base_ac = 5;
-          } else if (this.inventory.includes('gambeson')) {
+          } else if (inv.includes('gambeson')) {
             var base_ac = 7;
           } else {
             var base_ac = 9;
