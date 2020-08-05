@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Eagle+Lake&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=0.75">
@@ -596,7 +596,7 @@ ${this.encumbrance} coins-weight`;
     </script>
   </head>
   <body onload="roll_up_char()">
-    <div style="max-width:570px; margin:auto">
+    <div style="max-width:500px; margin:auto">
       <h1 style="font-family:'Eagle Lake';text-align:center;">Random OSR Character</h1>
       <p style="font-family:'IM Fell DW Pica';text-align:justify;">These characters are 1981 B/X by-the-book with a few minor exceptions. Gambeson is substituted for leather armor. Characters get max HP at first level. THAC0 is used instead of the OG to-hit matrix.</p>
       <label for="level">Level: </label>
@@ -613,7 +613,7 @@ ${this.encumbrance} coins-weight`;
         <option value="thief">thief</option>
       </select>
       <button onclick="roll_up_char(document.getElementById('level').value, document.getElementById('classy').value)">Let's roll!</button>
-      <pre id="sheet" style="font-family: 'Fira Code', monospace;"></pre>
+      <pre id="sheet" style="font-family: 'Courier Prime', monospace;font-size:0.87em;"></pre>
     </div>
     <script>
       function roll_up_char (level=1, cls='rando') {
