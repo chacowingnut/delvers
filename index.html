@@ -598,7 +598,7 @@ ${this.encumbrance} coins-weight`;
   <body onload="roll_up_char()">
     <div style="max-width:500px; margin:auto">
       <h1 style="font-family:'Eagle Lake';text-align:center;">Random OSR Character</h1>
-      <p style="font-family:'IM Fell DW Pica';text-align:justify;">These characters are 1981 B/X by-the-book with a few minor exceptions. Gambeson is substituted for leather armor. Characters get max HP at first level. THAC0 is used instead of the OG to-hit matrix.</p>
+      <p style="font-family:'IM Fell DW Pica';text-align:justify;">These characters are <a href="https://oldschoolessentials.necroticgnome.com/srd/index.php/Main_Page">1981 B/X</a> by-the-book with a few minor exceptions. Gambeson is substituted for leather armor. Characters get max HP at first level. THAC0 is used instead of the OG to-hit matrix.</p>
       <label for="level">Level: </label>
       <input type="number" name="level" id="level" value=1  style="width:3em">
       <label for="classy">Class: </label>
@@ -627,10 +627,10 @@ ${this.encumbrance} coins-weight`;
               cls = 'fighter';
             }
           } else if (abis.constitution > 9 && abis.constitution === max_abi
-                     && Math.random() < 0.1) {
+                     && Math.random() < 0.4) {
             cls = 'dwarf';
           } else if (abis.dexterity === max_abi) {
-            if (abis.constitution > 9 && abis.dexterity > 9 && Math.random() < 0.1) {
+            if (abis.constitution > 9 && abis.dexterity > 9 && Math.random() < 0.2) {
               cls = 'halfling';
             } else {
               cls = 'thief';
