@@ -4,14 +4,24 @@
     <style>
         body {
             font-family: Helvetica, sans-serif;
+            max-width: 800px;
+            margin: auto;
         }
-        .custom-th {
+        h1 {
             text-align: center;
-            vertical-align: top;
-            font-weight: bold;
+        }
+        table, th, td{
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 5px;
         }
         td {
             text-align: right;
+        }
+        tr:nth-child(even) {
+            background-color: lightgray;
         }
     </style>
 </head>
@@ -21,22 +31,104 @@
     <h3>Ye Olde Fast Packs</h3>
     <h3>Role-based Fast Packs</h3>
     <h2>Combat Priority</h2>
+    <p>
+        This is an alternative initiative procedure adapted from Judges Guild's
+        venerable Ready Ref Sheets.
+    </p>
+    <p>Individual initiative score = team initiative (from d6 roll) + dex mod + action mod (see table below) + speed mod (see table below)</p>
+    <table style="border: none;">
+        <tr style="border: none;">
+            <td style="border: none;">
+                <table>
+                    <tr>
+                        <th style="text-align: center;">Action</th>
+                        <th>Initiative adjustment</th>
+                    </tr>
+                    <tr>
+                        <td>Read scroll</td>
+                        <td>+1</td>
+                    </tr>
+                    <tr>
+                        <td>Spell (level 7-9)</td>
+                        <td>+2</td>
+                    </tr>
+                    <tr>
+                        <td>Short weapon<br>(dagger, hand axe)</td>
+                        <td>+3</td>
+                    </tr>
+                    <tr>
+                        <td>Medium weapon<br>(sword, warhammer, battle axe, mace)</td>
+                        <td>+4</td>
+                    </tr>
+                    <tr>
+                        <td>Long weapon<br>(spear, pole arm, two-handed sword)</td>
+                        <td>+5</td>
+                    </tr>
+                    <tr>
+                        <td>Mounted lance</td>
+                        <td>+6</td>
+                    </tr>
+                    <tr>
+                        <td>Spell (level 4-6)</td>
+                        <td>+7</td>
+                    </tr>
+                    <tr>
+                        <td>Missile fire</td>
+                        <td>+9</td>
+                    </tr>
+                    <tr>
+                        <td>Spell (level 1-3)</td>
+                        <td>+10</td>
+                    </tr>
+                    <tr>
+                        <td>Glance</td>
+                        <td>+12</td>
+                    </tr>
+                </table>
+            </td>
+            <td style="border: none;">
+                <table>
+                    <tr>
+                        <th style="text-align: center;">Speed</th>
+                        <th>Initiative adjustment</th>
+                    </tr>
+                    <tr>
+                        <td>30' (10')</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>60' (20')</td>
+                        <td>+1</td>
+                    </tr>
+                    <tr>
+                        <td>90' (30')</td>
+                        <td>+2</td>
+                    </tr>
+                    <tr>
+                        <td>120' (40')</td>
+                        <td>+3</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <p>Encumbered characters have an initiative score of 1&mdash;regardless of other factors.</p>
+    <h2>Weapon vs. Armor</h2>
     <p>Adapted from Judges Guild's venerable Ready Ref Sheets</p>
     <table>
         <tr>
-            <td></td>
-            <td class="custom-th" colspan="8">AC</td>
+            <th rowspan="2" style="vertical-align: bottom; text-align: right;">Weapon</th>
+            <th colspan="8">AC</th>
         </tr>
         <tr>
-            <td class="custom-th" style="vertical-align: bottom; text-align: right;">Weapon</td>
-            <td class="custom-th">9<br>No armor</td>
-            <td class="custom-th">8<br>Shield only</td>
-            <td class="custom-th">7<br>Leather</td>
-            <td class="custom-th">6<br>Leather<br>& shield</td>
-            <td class="custom-th">5<br>Chain</td>
-            <td class="custom-th">4<br>Chain<br>& shield</td>
-            <td class="custom-th">3<br>Plate</td>
-            <td class="custom-th">2<br>Plate<br>& shield</td>
+            <th>9<br>No armor</th>
+            <th>8<br>Shield only</th>
+            <th>7<br>Leather</th>
+            <th>6<br>Leather<br>& shield</th>
+            <th>5<br>Chain</th>
+            <th>4<br>Chain<br>& shield</th>
+            <th>3<br>Plate</th>
+            <th>2<br>Plate<br>& shield</th>
         </tr>
         <tr>
             <td>Dagger</td>
@@ -147,16 +239,6 @@
             <td>+1</td>
             <td>0</td>
             <td>0</td>
-        </tr>
-    </table>
-    <h2>Weapons versus Armor</h2>
-    <p>Adapted from Judges Guild's venerable Ready Ref Sheets</p>
-    <table>
-        <th>
-            <td></td>
-        </th>
-        <tr>
-            <td></td>
         </tr>
     </table>
     <h2>List of Standard Combat Actions</h2>
